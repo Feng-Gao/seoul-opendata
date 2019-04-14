@@ -81,7 +81,7 @@ for i in range(index,max_index+1):
                     'view':package_view,
                     
             }
-            scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
+            scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
             print('****************end---'+package_name+'---end****************')
         except Exception as ex:
             print(ex)
