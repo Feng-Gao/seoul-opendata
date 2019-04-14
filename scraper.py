@@ -36,8 +36,8 @@ for i in range(index,max_index+1):
     for p in package_blocks:
         #for each package block on the list page, we parse the url to detail page, and package title
         package_url = "http://data.seoul.go.kr/dataList/"+p.dl.a['href']
-        package_name = package_blocks[0].find(attrs={'class':'In_Titles'}).span.next.next.strip()
-        package_topics = package_blocks[0].find(attrs={'class':'In_Titles'}).span.text.strip()
+        package_name = p.find(attrs={'class':'In_Titles'}).span.next.next.strip()
+        package_topics = p.find(attrs={'class':'In_Titles'}).span.text.strip()
         print(package_url)
         print(package_name)
         try:
@@ -48,9 +48,9 @@ for i in range(index,max_index+1):
             format = '|'.join(format)
             package_format = format
 
-            package_org = package_blocks[0].find(attrs={'class':'In_cont01'}).text.strip()
-            package_view = package_blocks[0].find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
-            package_desc = '"'+package_blocks[0].find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
+            package_org = p.find(attrs={'class':'In_cont01'}).text.strip()
+            package_view = p.find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
+            package_desc = '"'+p.find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
 
             #go to detail page
             result = requests.get(package_url,headers=headers)
