@@ -23,6 +23,7 @@ ua = UserAgent()
 headers = {'User-Agent':ua.random}
 
 problem_url =[]
+today_date = datetime.date.today().strftime("%m/%d/%Y")
 
 for i in range(index,max_index+1):
     url = base_url + str(i)
@@ -67,7 +68,7 @@ for i in range(index,max_index+1):
                     +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
             print(row)
             package_dict = {
-                    'today':datetime.date.today().strftime("%m/%d/%Y"),
+                    'today':today_date,
                     'url':package_url,
                     'name':package_name,
                     'desc':package_desc,
@@ -125,7 +126,7 @@ for p in problem_url:
                     +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
             print(row)
             package_dict = {
-                    'today':datetime.date.today().strftime("%m/%d/%Y"),
+                    'today':today_date,
                     'url':package_url,
                     'name':package_name,
                     'desc':package_desc,
