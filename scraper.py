@@ -59,6 +59,10 @@ for i in range(index,max_index+1):
 
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
+            try:
+                package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
+            except:
+                package_updated = 'MISSING'
             package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
 
 
@@ -118,7 +122,10 @@ for p in problem_url:
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
             package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
-
+            try:
+                package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
+            except:
+                package_updated = 'MISSING'
 
             #output the result
             #note for tags, it might be splited by , or chinese , or chinese 、
