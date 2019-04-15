@@ -41,18 +41,18 @@ for i in range(index,max_index+1):
         package_topics = p.find(attrs={'class':'In_Titles'}).span.text.strip()
         #print(package_url)
         #print(package_name)
+       
+        imgs = p.find(attrs={'class':'In_Ico'}).find_all('img')
+        format = []
+        for i in imgs:
+            format.append(i['src'].split('/')[2].split('.')[0])
+        format = '|'.join(format)
+        package_format = format
+
+        package_org = p.find(attrs={'class':'In_cont01'}).text.strip()
+        package_view = p.find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
+        package_desc = '"'+p.find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
         try:
-            imgs = p.find(attrs={'class':'In_Ico'}).find_all('img')
-            format = []
-            for i in imgs:
-                format.append(i['src'].split('/')[2].split('.')[0])
-            format = '|'.join(format)
-            package_format = format
-
-            package_org = p.find(attrs={'class':'In_cont01'}).text.strip()
-            package_view = p.find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
-            package_desc = '"'+p.find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
-
             #go to detail page
             result = requests.get(package_url,headers=headers)
             soup = BeautifulSoup(result.content,features='lxml')
@@ -91,7 +91,7 @@ for i in range(index,max_index+1):
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url})
+            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':'package_view,'desc':package_desc})
             continue
 
 print(problem_url)
@@ -103,18 +103,14 @@ for p in problem_url:
         package_topics = p['topics']
         #print(package_url)
         #print(package_name)
+        
+      
+        package_format = p['format']
+
+        package_org = p['org']
+        package_view = p['view']
+        package_desc = p['desc']
         try:
-            imgs = p.find(attrs={'class':'In_Ico'}).find_all('img')
-            format = []
-            for i in imgs:
-                format.append(i['src'].split('/')[2].split('.')[0])
-            format = '|'.join(format)
-            package_format = format
-
-            package_org = p.find(attrs={'class':'In_cont01'}).text.strip()
-            package_view = p.find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
-            package_desc = '"'+p.find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
-
             #go to detail page
             result = requests.get(package_url,headers=headers)
             soup = BeautifulSoup(result.content,features='lxml')
@@ -152,5 +148,5 @@ for p in problem_url:
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'url':package_url})
+            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':'package_view,'desc':package_desc})
             continue
