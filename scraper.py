@@ -27,7 +27,7 @@ today_date = datetime.date.today().strftime("%m/%d/%Y")
 
 for i in range(index,max_index+1):
     url = base_url + str(i)
-    print(url)
+    #print(url)
 
     result = requests.get(url,headers=headers)
     soup = BeautifulSoup(result.content,features='lxml')
@@ -39,8 +39,8 @@ for i in range(index,max_index+1):
         package_url = "http://data.seoul.go.kr/dataList/"+p.dl.a['href']
         package_name = p.find(attrs={'class':'In_Titles'}).span.next.next.strip()
         package_topics = p.find(attrs={'class':'In_Titles'}).span.text.strip()
-        print(package_url)
-        print(package_name)
+        #print(package_url)
+        #print(package_name)
         try:
             imgs = p.find(attrs={'class':'In_Ico'}).find_all('img')
             format = []
@@ -70,7 +70,7 @@ for i in range(index,max_index+1):
             #note for tags, it might be splited by , or chinese , or chinese 、
             row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
                     +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
-            print(row)
+            #print(row)
             package_dict = {
                     'today':today_date,
                     'url':package_url,
@@ -87,7 +87,7 @@ for i in range(index,max_index+1):
                     
             }
             scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
-            print('****************end---'+package_name+'---end****************')
+            #print('****************end---'+package_name+'---end****************')
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
@@ -101,8 +101,8 @@ for p in problem_url:
         package_url = p['url']
         package_name = p['name']
         package_topics = p['topics']
-        print(package_url)
-        print(package_name)
+        #print(package_url)
+        #print(package_name)
         try:
             imgs = p.find(attrs={'class':'In_Ico'}).find_all('img')
             format = []
@@ -131,7 +131,7 @@ for p in problem_url:
             #note for tags, it might be splited by , or chinese , or chinese 、
             row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
                     +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
-            print(row)
+            #print(row)
             package_dict = {
                     'today':today_date,
                     'url':package_url,
@@ -148,7 +148,7 @@ for p in problem_url:
                     
             }
             scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
-            print('****************end---'+package_name+'---end****************')
+            #print('****************end---'+package_name+'---end****************')
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
