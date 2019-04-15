@@ -56,12 +56,12 @@ for i in range(index,max_index+1):
             #go to detail page
             result = requests.get(package_url,headers=headers)
             soup = BeautifulSoup(result.content,features='lxml')
-
+            
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
-            try:
+            if soup.find('span',string='데이터수정일자'):
                 package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
-            except:
+            else:
                 package_updated = 'MISSING'
             package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
 
@@ -82,7 +82,7 @@ for i in range(index,max_index+1):
                     'format':package_format,
                     'created':package_created,
                     'frequency':package_frequency,
-                    
+                    'updated':package_updated
                     'view':package_view,
                     
             }
@@ -118,15 +118,15 @@ for p in problem_url:
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
             package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
-            try:
+            if soup.find('span',string='데이터수정일자'):
                 package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
-            except:
+            else:
                 package_updated = 'MISSING'
 
             #output the result
             #note for tags, it might be splited by , or chinese , or chinese 、
             row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
-                    +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
+                    +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_updated+','+package_view+'\n'
             #print(row)
             package_dict = {
                     'today':today_date,
@@ -139,7 +139,7 @@ for p in problem_url:
                     'format':package_format,
                     'created':package_created,
                     'frequency':package_frequency,
-                    
+                    'updated':package_updated
                     'view':package_view,
                     
             }
