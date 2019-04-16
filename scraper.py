@@ -52,101 +52,51 @@ for i in range(index,max_index+1):
         package_org = p.find(attrs={'class':'In_cont01'}).text.strip()
         package_view = p.find(attrs={'class':'In_cont02'}).span.text.split(':')[1].strip()
         package_desc = '"'+p.find_all(attrs={'class':'In_cont02'})[1].text.strip()+'"'
+        #go to detail page
+        result = requests.get(package_url,headers=headers)
+        soup = BeautifulSoup(result.content,features='lxml')
+        
         try:
-            #go to detail page
-            result = requests.get(package_url,headers=headers)
-            soup = BeautifulSoup(result.content,features='lxml')
-            
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
+        except:
+            package_created = ''
+            problem_url.append(package_url)
+        try:
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
-            if soup.find('span',string='데이터수정일자'):
-                package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
-            else:
-                package_updated = 'MISSING'
-            package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
+        except:
+            package_frequency = ''
+            problem_url.append(package_url)
+        
+        if soup.find('span',string='데이터수정일자'):
+            package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
+        else:
+            package_updated = 'MISSING'
+        package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
 
 
-            #output the result
-            #note for tags, it might be splited by , or chinese , or chinese 、
-            row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
-                    +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
-            #print(row)
-            package_dict = {
-                    'today':today_date,
-                    'url':package_url,
-                    'name':package_name,
-                    'desc':package_desc,
-                    'org':package_org,
-                    'topics':package_topics,
-                    'tags':package_tags,
-                    'format':package_format,
-                    'created':package_created,
-                    'frequency':package_frequency,
-                    'updated':package_updated,
-                    'view':package_view,
-                    
-            }
-            scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
-            #print('****************end---'+package_name+'---end****************')
-        except Exception as ex:
-            print(ex)
-            print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':package_view,'desc':package_desc})
-            continue
+        #output the result
+        #note for tags, it might be splited by , or chinese , or chinese 、
+        row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
+                +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_view+'\n'
+        #print(row)
+        package_dict = {
+                'today':today_date,
+                'index_url':url,
+                'url':package_url,
+                'name':package_name,
+                'desc':package_desc,
+                'org':package_org,
+                'topics':package_topics,
+                'tags':package_tags,
+                'format':package_format,
+                'created':package_created,
+                'frequency':package_frequency,
+                'updated':package_updated,
+                'view':package_view,
 
+        }
+        scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
+        print('****************end---'+package_name+'---end****************')
+        
 print(problem_url)
 
-for p in problem_url:
-        #for each package block on the list page, we parse the url to detail page, and package title
-        package_url = p['url']
-        package_name = p['name']
-        package_topics = p['topics']
-        #print(package_url)
-        #print(package_name)
-        
-      
-        package_format = p['format']
-
-        package_org = p['org']
-        package_view = p['view']
-        package_desc = p['desc']
-        try:
-            #go to detail page
-            result = requests.get(package_url,headers=headers)
-            soup = BeautifulSoup(result.content,features='lxml')
-
-            package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
-            package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
-            package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
-            if soup.find('span',string='데이터수정일자'):
-                package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
-            else:
-                package_updated = 'MISSING'
-
-            #output the result
-            #note for tags, it might be splited by , or chinese , or chinese 、
-            row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
-                    +','+package_tags+','+package_format+','+package_created+','+package_frequency+','+package_updated+','+package_view+'\n'
-            #print(row)
-            package_dict = {
-                    'today':today_date,
-                    'url':package_url,
-                    'name':package_name,
-                    'desc':package_desc,
-                    'org':package_org,
-                    'topics':package_topics,
-                    'tags':package_tags,
-                    'format':package_format,
-                    'created':package_created,
-                    'frequency':package_frequency,
-                    'updated':package_updated,
-                    'view':package_view,
-                    
-            }
-            scraperwiki.sqlite.save(unique_keys=['today','name'],data=package_dict)
-            #print('****************end---'+package_name+'---end****************')
-        except Exception as ex:
-            print(ex)
-            print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':package_view,'desc':package_desc})
-            continue
