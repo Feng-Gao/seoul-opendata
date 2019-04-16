@@ -82,7 +82,7 @@ for i in range(index,max_index+1):
                     'format':package_format,
                     'created':package_created,
                     'frequency':package_frequency,
-                    'updated':package_updated
+                    'updated':package_updated,
                     'view':package_view,
                     
             }
@@ -139,7 +139,7 @@ for p in problem_url:
                     'format':package_format,
                     'created':package_created,
                     'frequency':package_frequency,
-                    'updated':package_updated
+                    'updated':package_updated,
                     'view':package_view,
                     
             }
