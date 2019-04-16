@@ -59,21 +59,24 @@ for i in range(index,max_index+1):
         try:
             package_created = soup.find('span',string='데이터공개일자').next.next.next.text.strip()
         except:
-            package_created = ''
+            package_created = 'ERROR'
             problem_url.append(package_url)
         try:
             package_frequency = soup.find('span',string='갱신주기').next.next.next.text.strip()
         except:
-            package_frequency = ''
+            package_frequency = 'ERROR'
             problem_url.append(package_url)
         
         if soup.find('span',string='데이터수정일자'):
             package_updated = soup.find('span',string='데이터수정일자').next.next.next.text.strip()
         else:
             package_updated = 'MISSING'
-        package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
-
-
+        try:
+            package_tags = '|'.join([x.text for x in soup.find('span',string='태그').parent.find_all('span')[1].find_all('a')])
+        except:
+            package_created = 'ERROR'
+            problem_url.append(package_url)
+    
         #output the result
         #note for tags, it might be splited by , or chinese , or chinese 、
         row = package_url+','+package_name+','+package_desc+','+package_org+','+package_topics\
