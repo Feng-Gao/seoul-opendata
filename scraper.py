@@ -91,7 +91,7 @@ for i in range(index,max_index+1):
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':'package_view,'desc':package_desc})
+            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':package_view,'desc':package_desc})
             continue
 
 print(problem_url)
@@ -148,5 +148,5 @@ for p in problem_url:
         except Exception as ex:
             print(ex)
             print(package_url + ' problem occurs and will re-try')
-            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':'package_view,'desc':package_desc})
+            problem_url.append({'name':package_name,'topics':package_topics,'url':package_url,'org':package_org,'format':package_format,'view':package_view,'desc':package_desc})
             continue
